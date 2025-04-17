@@ -3,58 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vārda dienas kalendārs</title>
+  <title>Kalendārs</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #f3f3f3;
-      text-align: center;
+      font-family: Arial, sans-serif;
       padding: 2em;
-    }
-    h1 {
-      color: #333;
+      text-align: center;
+      background: #f0f0f0;
     }
     table {
       margin: auto;
       border-collapse: collapse;
+      background: white;
     }
     th, td {
-      padding: 10px;
       border: 1px solid #ccc;
-      min-width: 40px;
+      padding: 10px;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+    }
+    th {
+      background: #eee;
     }
   </style>
 </head>
 <body>
-  <h1>Laipni lūgti Vārda dienu kalendārā!</h1>
-  <p>Drīzumā šeit varēs redzēt šodienas vārda dienas un pantiņus!</p>
-
+  <h1>Mēneša kalendārs</h1>
   <div id="calendar"></div>
 
   <script>
     const calendar = document.getElementById("calendar");
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth();
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
 
     const monthNames = [
       "Janvāris", "Februāris", "Marts", "Aprīlis", "Maijs", "Jūnijs",
       "Jūlijs", "Augusts", "Septembris", "Oktobris", "Novembris", "Decembris"
     ];
 
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDay = new Date(year, month, 1).getDay(); // 0 = svētdiena
-
-    let html = `<h2>${monthNames[month]} ${year}</h2><table><tr>`;
     const days = ["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"];
-    days.forEach(d => html += `<th>${d}</th>`);
-    html += `</tr><tr>`;
 
-    let skip = (firstDay + 6) % 7;
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let html = `<h2>${monthNames[month]} ${year}</h2>`;
+    html += "<table><tr>";
+    days.forEach(d => html += `<th>${d}</th>`);
+    html += "</tr><tr>";
+
+    let skip = (firstDay + 6) % 7; // Padarām nedēļu sākumu no pirmdienas
     for (let i = 0; i < skip; i++) html += "<td></td>";
 
     for (let d = 1; d <= daysInMonth; d++) {
-      if ((skip + d - 1) % 7 === 0 && d !== 1) html += "</tr><tr>";
+      if ((skip + d - 1) % 7 === 0 && d > 1) html += "</tr><tr>";
       html += `<td>${d}</td>`;
     }
 
