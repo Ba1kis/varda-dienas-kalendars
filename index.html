@@ -14,42 +14,52 @@
     h1 {
       color: #333;
     }
+    table {
+      margin: auto;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      min-width: 40px;
+    }
   </style>
 </head>
 <body>
   <h1>Laipni lūgti Vārda dienu kalendārā!</h1>
-  <p>Drīzumā šeit varēs redzēt šodienas vārda dienas un apsveikuma pantiņus!</p>
- </body>
+  <p>Drīzumā šeit varēs redzēt šodienas vārda dienas un pantiņus!</p>
 
   <div id="calendar"></div>
 
-<script>
-  const calendar = document.getElementById("calendar");
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth();
+  <script>
+    const calendar = document.getElementById("calendar");
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
 
-  const monthNames = [
-    "Janvāris", "Februāris", "Marts", "Aprīlis", "Maijs", "Jūnijs",
-    "Jūlijs", "Augusts", "Septembris", "Oktobris", "Novembris", "Decembris"
-  ];
+    const monthNames = [
+      "Janvāris", "Februāris", "Marts", "Aprīlis", "Maijs", "Jūnijs",
+      "Jūlijs", "Augusts", "Septembris", "Oktobris", "Novembris", "Decembris"
+    ];
 
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDay = new Date(year, month, 1).getDay(); // 0 = svētdiena
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDay = new Date(year, month, 1).getDay(); // 0 = svētdiena
 
-  let html = `<h2>${monthNames[month]} ${year}</h2><table border="1" style="margin:auto;"><tr>`;
-  const days = ["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"];
-  days.forEach(d => html += `<th>${d}</th>`);
-  html += `</tr><tr>`;
+    let html = `<h2>${monthNames[month]} ${year}</h2><table><tr>`;
+    const days = ["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"];
+    days.forEach(d => html += `<th>${d}</th>`);
+    html += `</tr><tr>`;
 
-  for (let i = 1; i < ((firstDay + 6) % 7) + 1; i++) html += "<td></td>";
-  for (let d = 1; d <= daysInMonth; d++) {
-    if ((firstDay + d - 1) % 7 === 0) html += "</tr><tr>";
-    html += `<td style="padding:10px;">${d}</td>`;
-  }
+    let skip = (firstDay + 6) % 7;
+    for (let i = 0; i < skip; i++) html += "<td></td>";
 
-  html += "</tr></table>";
-  calendar.innerHTML = html;
-</script>
+    for (let d = 1; d <= daysInMonth; d++) {
+      if ((skip + d - 1) % 7 === 0 && d !== 1) html += "</tr><tr>";
+      html += `<td>${d}</td>`;
+    }
 
+    html += "</tr></table>";
+    calendar.innerHTML = html;
+  </script>
+</body>
 </html>
