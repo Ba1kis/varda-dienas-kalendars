@@ -19,5 +19,38 @@
 <body>
   <h1>Laipni lūgti Vārda dienu kalendārā!</h1>
   <p>Drīzumā šeit varēs redzēt šodienas vārda dienas un apsveikuma pantiņus!</p>
+
+<div id="calendar"></div>
+
+<script>
+  const calendar = document.getElementById("calendar");
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  const monthNames = [
+    "Janvāris", "Februāris", "Marts", "Aprīlis", "Maijs", "Jūnijs",
+    "Jūlijs", "Augusts", "Septembris", "Oktobris", "Novembris", "Decembris"
+  ];
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDay = new Date(year, month, 1).getDay(); // 0 = svētdiena
+
+  let html = `<h2>${monthNames[month]} ${year}</h2><table border="1" style="margin:auto;"><tr>`;
+  const days = ["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"];
+  days.forEach(d => html += `<th>${d}</th>`);
+  html += `</tr><tr>`;
+
+  for (let i = 1; i < ((firstDay + 6) % 7) + 1; i++) html += "<td></td>";
+  for (let d = 1; d <= daysInMonth; d++) {
+    if ((firstDay + d - 1) % 7 === 0) html += "</tr><tr>";
+    html += `<td style="padding:10px;">${d}</td>`;
+  }
+
+  html += "</tr></table>";
+  calendar.innerHTML = html;
+</script>
+
+  
 </body>
 </html>
